@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    container_name: content_creator_app
+    command: python main.py
+    volumes:
+      # Monta la carpeta de assets para que los archivos generados persistan en el host
+      - ./assets:/app/assets
+    env_file:
+      # Carga las variables de entorno desde el archivo .env
+      - ./.env
+    depends_on:
+      - db
+    restart: unless-stopped
+
+  db:
+    image: postgres:15-alpine
+    container_name: postgres_db
+    volumes:
+      # Persiste los datos de la base de datos en el host
+      - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - ./.env
+    ports:
+      # Expone el puerto de la DB al host (opcional, útil para debugging)
+      - "5432:5432"
+    restart: unless-stopped
+
+volumes:
+  postgres_data:

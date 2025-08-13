@@ -1,0 +1,32 @@
+# Entorno virtual
+venv
+.venv
+
+# Archivos de caché de Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Git
+.git
+.gitignore
+
+# Configuración de IDE
+.vscode/
+.idea/
+
+# Archivos generados en tiempo de ejecución
+assets/
+*.db
+*.db-journal
+
+# Documentación y archivos de desarrollo
+next.md
+README.md
+.env
+
+# Archivos de Docker
+Dockerfile
+docker-compose.yml
+.dockerignore

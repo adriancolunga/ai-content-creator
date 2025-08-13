@@ -1,0 +1,38 @@
+# --- Essential Libraries ---
+
+# huggingface_hub==0.34.3
+
+# Core IA and Orchestration
+langchain>=0.2.0,<0.3.0
+langgraph>=0.0.60,<0.1.0
+langchain-openai>=0.1.0,<0.2.0
+openai>=1.0.0,<2.0.0
+
+# Multimedia Generation & Editing
+moviepy==1.0.3
+pillow==10.3.0 # For image manipulation
+
+# Database
+SQLAlchemy==2.0.30
+psycopg2-binary==2.9.9  # For PostgreSQL, replace with another driver if needed (e.g., mysql-connector-python)
+
+# Social Media APIs
+# google-api-python-client==2.134.0
+# google-auth-httplib2==0.2.0
+# google-auth-oauthlib==1.2.0
+
+# Utility & Configuration
+python-dotenv==1.0.1
+replicate>=0.25.0
+requests==2.32.3
+apscheduler==3.10.4
+
+# Linter and Formatter
+# ruff
+# black
+
+
+# --- Optional/Development Libraries ---
+
+# For advanced error handling
+# tenacity==8.3.0
