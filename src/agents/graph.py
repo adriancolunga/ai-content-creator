@@ -30,7 +30,12 @@ def generate_content_node(state: AppState) -> AppState:
         project.status = 'generating_content'
         db.commit()
 
+        # # ----------------
+        # script_data = {"scenes": [{"scene_description": "Delegado listo para firmar la Declaracion de Independencia.", "image_prompt": "historical, 18th century, dimly lit room, delegates in period clothing, large wooden table, Declaration of Independence on the table, quill pen in hand, focused expressions, photorealistic, cinematic, high detail, 4K", "video_prompt": "Slow zoom in on the quill pen hovering over the document"}], "environment_prompt": "An 18th century assembly room filled with delegates, historical decor, and a sense of monumental importance.", "audio_prompt": "Soft murmurs of discussion, the sound of a quill scratching paper, and the faint rustle of clothing and paper.", "hashtags": ["#IndependenceDay", "#HistoricalMoment", "#POVExperience"]}
+        # # ----------------
+
         script_data = content_generator.generate_viral_script(state['idea'])
+
         if 'error' in script_data:
             raise ValueError(script_data['error'])
         
@@ -55,6 +60,7 @@ def generate_multimedia_node(state: AppState) -> AppState:
 
         image_paths = multimedia_results.get('images', [])
         video_paths = multimedia_results.get('videos', [])
+        audio_path = multimedia_results.get('audio')
 
         if not image_paths or not video_paths:
             raise ValueError("Fallo en la generación de multimedia (imágenes o videos).")
@@ -62,10 +68,13 @@ def generate_multimedia_node(state: AppState) -> AppState:
         # Actualizar el estado para los siguientes nodos
         state['image_paths'] = image_paths
         state['video_paths'] = video_paths
-        # El audio_path se puede mantener si se genera en otro lado, aquí lo omitimos por ahora
-        state['audio_path'] = None
+        state['audio_path'] = audio_path
 
-        project.assets_urls = {'images': image_paths, 'videos': video_paths}
+        project.assets_urls = {
+            'images': image_paths, 
+            'videos': video_paths,
+            'audio': audio_path
+        }
         # Guardamos la primera ruta de video como referencia principal, si existe
         project.video_path = video_paths[0] if video_paths else None
         project.status = 'multimedia_completed'
