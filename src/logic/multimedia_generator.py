@@ -17,29 +17,6 @@ IMAGES_DIR.mkdir(parents=True, exist_ok=True)
 AUDIO_DIR.mkdir(parents=True, exist_ok=True)
 
 
-
-# --- Generación de Audio ---
-
-def generate_ambient_sound(audio_prompt: str, project_id: str) -> Optional[str]:
-    """
-    Placeholder para la futura implementación de generación de sonido ambiental.
-
-    En el futuro, esta función usará una API como la de Stability AI (Stable Audio)
-    para generar un paisaje sonoro basado en el prompt.
-
-    Args:
-        audio_prompt: El prompt de texto para generar el audio.
-        project_id: Un identificador único del proyecto para nombrar el archivo.
-
-    Returns:
-        La ruta al archivo de audio generado o None si no se implementa.
-    """
-    print("\nADVERTENCIA: La generación de sonido ambiental no está implementada.")
-    print(f"Prompt de audio recibido: '{audio_prompt}'")
-    # Cuando se implemente, aquí iría la llamada a la API de audio.
-    # Por ahora, simplemente no se genera ningún archivo.
-    return None
-
 # --- Generación de Imágenes ---
 
 def _download_image(url: str, save_path: Path):
@@ -88,26 +65,23 @@ def generate_scene_images(scenes: List[Dict[str, str]], project_id: str) -> List
                 "aspect_ratio": "9:16"
             }
 
-            # La API de ideogram-ai/ideogram-v3-turbo devuelve una LISTA de objetos FileOutput
             output_list = replicate.run(
                 "ideogram-ai/ideogram-v3-turbo",
                 input=input_data
             )
 
-            # La documentación muestra que puedes obtener la URL de cada FileOutput.
-            # Como la mayoría de los modelos devuelven una lista, tomamos el primer elemento.
             if output_list and isinstance(output_list, list):
                 file_output_object = output_list[0]
-                # Accedemos a la propiedad .url (sin paréntesis)
                 image_url = file_output_object.url
             else:
-                # En caso de que no devuelva una lista (por ejemplo, si devuelve un solo objeto)
-                # Se asume que el output es el objeto FileOutput directamente.
                 image_url = output_list.url
 
+            # # ----------------
             # image_url = "src/assets/images/79_a265a246_scene_1.png"
+            # image_paths.append(str(image_url))
+            # # ----------------
 
-            # Validaciones sobre la URL
+            Validaciones sobre la URL
             if not image_url or not isinstance(image_url, str):
                 raise ValueError("La salida de la API no es una URL válida.")
 
@@ -139,14 +113,15 @@ def generate_multimedia_for_idea(script_data: Dict, project_id: str) -> Dict[str
     """
     multimedia_paths = {
         "images": [],
-        "videos": []
+        "videos": [],
+        "audio": None
     }
     scenes = script_data.get('scenes', [])
     if not scenes:
         print("El guion no contiene escenas. No se puede generar multimedia.")
         return multimedia_paths
 
-    # 1. Generar imágenes
+    # 2. Generar imágenes
     image_paths = generate_scene_images(scenes, project_id)
     if not image_paths:
         print("No se generaron imágenes. Deteniendo el proceso de generación de video.")
@@ -154,9 +129,10 @@ def generate_multimedia_for_idea(script_data: Dict, project_id: str) -> Dict[str
     
     multimedia_paths["images"] = image_paths
 
-    # 2. Extraer prompts de video y generar los videos
+    # 3. Extraer prompts de video y generar los videos (con audio)
     video_prompts = [scene.get('video_prompt', '') for scene in scenes]
-    video_paths = generate_videos_from_images(project_id, image_paths, video_prompts)
+    audio_prompt = script_data.get('audio_prompt', '')
+    video_paths = generate_videos_from_images(project_id, image_paths, video_prompts, audio_prompt)
     multimedia_paths["videos"] = video_paths
 
     return multimedia_paths
