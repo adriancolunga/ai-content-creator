@@ -17,8 +17,6 @@ IMAGES_DIR.mkdir(parents=True, exist_ok=True)
 AUDIO_DIR.mkdir(parents=True, exist_ok=True)
 
 
-# --- Generación de Imágenes ---
-
 def _download_image(url: str, save_path: Path):
     """Descarga una imagen desde una URL y la guarda localmente."""
     try:
@@ -81,7 +79,6 @@ def generate_scene_images(scenes: List[Dict[str, str]], project_id: str) -> List
             # image_paths.append(str(image_url))
             # # ----------------
 
-            Validaciones sobre la URL
             if not image_url or not isinstance(image_url, str):
                 raise ValueError("La salida de la API no es una URL válida.")
 

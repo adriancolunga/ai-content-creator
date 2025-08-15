@@ -66,14 +66,10 @@ def generate_videos_from_images(idea_id: int, image_paths: list[str], video_prom
             # Descargar el video
             video_filename = f"{idea_id}_{i}_final.mp4"
             save_path = os.path.join(video_dir, video_filename)
-            _download_video(output_url, save_path)
-
-            # # # ----------------
-            # save_path = "src/assets/videos/81_b35cd5ed_0_final.mp4"
-            # # # ----------------
+            _download_video(output_url.url, save_path)
 
             if audio_prompt:
-                print(f"Generando audio para el video con prompt: '{audio_prompt}'")
+                print(f" \_ Generando audio para el video: '{audio_prompt}'")
                 with open(save_path, "rb") as video_file:
                     audio_video_output = replicate.run(
                         "zsxkib/mmaudio:62871fb59889b2d7c13777f08deb3b36bdff88f7e1d53a50ad7694548a41b484",
@@ -88,6 +84,11 @@ def generate_videos_from_images(idea_id: int, image_paths: list[str], video_prom
                 video_paths.append(final_video_path)
             else:
                 video_paths.append(save_path)
+
+            # # ----------------
+            # save_path = "src/assets/videos/87_ae7a7fa1_0_final_with_audio.mp4"
+            # video_paths.append(save_path)
+            # # ----------------
 
         except replicate.exceptions.ReplicateError as e:
             print(f"Error de la API de Replicate al procesar {image_path}: {e}")

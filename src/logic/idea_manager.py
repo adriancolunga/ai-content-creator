@@ -15,7 +15,7 @@ def get_next_pending_idea() -> Optional[Idea]:
         with get_db() as db:
             # Usamos with_for_update() para bloquear la fila seleccionada hasta que la transacción termine (commit).
             # Esto es fundamental para evitar que dos workers tomen la misma idea en un entorno concurrente.
-            # Nota: Requiere un backend de DB que soporte esta característica, como PostgreSQL.
+            # Nota: Requiere un backend de DB que soporte esta característica, como PostgreSQL. 
             idea = db.query(Idea).filter(Idea.status == 'pending').order_by(Idea.created_at.asc()).with_for_update().first()
             
             if idea:
@@ -27,7 +27,6 @@ def get_next_pending_idea() -> Optional[Idea]:
             return None
     except Exception as e:
         print(f"Error al obtener la siguiente idea: {e}")
-        # El context manager se encarga del rollback en caso de excepción y de cerrar la sesión.
         return None
 
 def update_idea_status(idea_id: int, status: str, error_message: str = None):
@@ -38,10 +37,8 @@ def update_idea_status(idea_id: int, status: str, error_message: str = None):
             if idea:
                 idea.status = status
                 if error_message:
-                    # Podríamos añadir una columna de error a la tabla Idea si quisiéramos
                     print(f"Error en idea {idea_id}: {error_message}")
                 db.commit()
                 print(f"Idea ID {idea.id} actualizada a estado '{status}'.")
     except Exception as e:
         print(f"Error al actualizar el estado de la idea {idea_id}: {e}")
-        # El context manager se encarga del rollback y cierre.
