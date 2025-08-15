@@ -15,7 +15,7 @@ def run_pipeline(idea_text: str, idea_id: int):
 
     initial_state = {
         "idea": idea_text,
-        "project_id": None, # Se asignará en el primer nodo
+        "project_id": None,
         "retries": 0
     }
 
@@ -68,7 +68,7 @@ def main():
     # 3. Configurar y lanzar el scheduler
     scheduler = BlockingScheduler(timezone="UTC")
     # Ejecuta el job cada 5 minutos (puedes ajustarlo a 'hours=1', etc.)
-    scheduler.add_job(pipeline_job, 'interval', minutes=5)
+    scheduler.add_job(pipeline_job, 'interval', minutes=30)
     
     print("Iniciando el servicio de automatización. Presiona Ctrl+C para salir.")
     

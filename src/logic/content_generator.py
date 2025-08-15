@@ -6,7 +6,6 @@ from langchain.prompts import ChatPromptTemplate
 from langchain.schema.output_parser import StrOutputParser
 from .schemas import ScriptStructure
 
-# --- Plantillas de Prompts ---
 
 # 1. Plantilla para generar la estructura completa del video, incluyendo prompts de imagen y video.
 script_structure_template = """
@@ -33,11 +32,7 @@ Para cada una de las {num_scenes} escenas, debes generar:
 
 **Formato de Salida Obligatorio:**
 Devuelve únicamente un objeto JSON válido que se ajuste a la estructura Pydantic proporcionada. No añadas texto adicional.
-
-
 """
-
-# --- Funciones de Generación ---
 
 def generate_viral_script(idea: str) -> Dict[str, Any]:
     """Función principal que orquesta la generación del guion completo en una sola llamada a la IA."""
@@ -52,10 +47,7 @@ def generate_viral_script(idea: str) -> Dict[str, Any]:
     chain = prompt | structured_llm
 
     try:
-        # Generar la estructura completa en una sola llamada
         script_obj = chain.invoke({"idea": idea, "num_scenes": NUM_SCENES})
-        
-        # Convertir el objeto Pydantic a un diccionario para el resto del pipeline
         final_script = script_obj.model_dump()
 
         print("Guion generado exitosamente.")
@@ -65,14 +57,11 @@ def generate_viral_script(idea: str) -> Dict[str, Any]:
         print(f"Error al generar la estructura del guion: {e}")
         return {"error": f"Error en la generación del guion: {e}"}
 
-
-# --- Ejemplo de Uso (para pruebas) ---
 if __name__ == '__main__':
     test_idea = "Cleopatra entrando a Roma por primera vez, no como prisionera, sino como conquistadora silenciosa."
     
     final_script_data = generate_viral_script(test_idea)
     
     if 'error' not in final_script_data:
-        # Imprimir el resultado de forma legible
         print("\n--- GUION FINAL GENERADO ---")
         print(json.dumps(final_script_data, indent=2, ensure_ascii=False))
