@@ -11,7 +11,7 @@ REPLICATE_API_TOKEN = os.getenv("REPLICATE_API_TOKEN")
 INSTAGRAM_ACCOUNT_ID = os.getenv('INSTAGRAM_ACCOUNT_ID')
 INSTAGRAM_ACCESS_TOKEN = os.getenv('INSTAGRAM_ACCESS_TOKEN')
 NGROK_PUBLIC_URL = os.getenv('NGROK_PUBLIC_URL')
-DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./content_creator.db")
+DATABASE_URL = os.getenv("DATABASE_URL")
 
 def check_env_vars():
     """Verifica que las variables de entorno esenciales estén configuradas."""

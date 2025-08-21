@@ -34,11 +34,11 @@ def generate_content_node(state: AppState) -> AppState:
             db.commit()
 
             # ----------
-            script_data = {"scenes": [{"scene_description": "Erudito salvando pergaminos entre llamas", "image_prompt": "ancient library engulfed in flames, scholar in traditional robes, scrolls in hands, dramatic lighting, intense fire, smoke, chaos, surreal, cinematic, photorealistic, 4K", "video_prompt": "Camera shakes slightly to simulate panic, flames flicker dynamically"}], "environment_prompt": "Ancient library with towering shelves, filled with scrolls and manuscripts, bathed in the warm glow of fire, chaotic and urgent atmosphere", "audio_prompt": "Crackling fire, distant shouting, rustle of scrolls, ominous background music", "hashtags": ["#HistoriaAntigua", "#BibliotecaDeAlejandr\u00eda", "#POVInmersivo"]}
+            # script_data = {"scenes": [{"scene_description": "Erudito salvando pergaminos entre llamas", "image_prompt": "ancient library engulfed in flames, scholar in traditional robes, scrolls in hands, dramatic lighting, intense fire, smoke, chaos, surreal, cinematic, photorealistic, 4K", "video_prompt": "Camera shakes slightly to simulate panic, flames flicker dynamically"}], "environment_prompt": "Ancient library with towering shelves, filled with scrolls and manuscripts, bathed in the warm glow of fire, chaotic and urgent atmosphere", "audio_prompt": "Crackling fire, distant shouting, rustle of scrolls, ominous background music", "hashtags": ["#HistoriaAntigua", "#BibliotecaDeAlejandr\u00eda", "#POVInmersivo"]}
             # ----------
 
 
-            # script_data = content_generator.generate_viral_script(state['idea'])
+            script_data = content_generator.generate_viral_script(state['idea'])
 
             if 'error' in script_data:
                 raise ValueError(script_data['error'])

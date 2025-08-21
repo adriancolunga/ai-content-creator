@@ -1,90 +1,83 @@
-# 🤖 Viral Content Creator AI
+# 🤖 AI Content Creator
 
-Este proyecto es un pipeline automatizado de generación de contenido de video, diseñado para transformar una simple idea en una serie de videos cortos (estilo Reels/Shorts) inmersivos y listos para publicar en redes sociales. Utiliza una arquitectura modular basada en agentes de IA para orquestar el proceso completo, desde la creación del guion hasta la generación de los recursos multimedia.
+Este proyecto es un agente de IA autónomo que automatiza la creación de videos cortos (estilo Reels/Shorts) a partir de una simple idea. El sistema gestiona el ciclo completo: desde la generación del guion y la creación de todos los recursos multimedia (imágenes, videoclips y sonido) hasta la publicación en redes sociales.
 
 ## ✨ Características Principales
 
-- **Generación de Guiones con IA:** A partir de una idea inicial, un LLM (GPT-4o) genera una estructura de guion completa, incluyendo una narrativa secuencial de escenas, una descripción del entorno y hashtags relevantes.
-- **Prompts Optimizados:** El sistema transforma las descripciones de las escenas en prompts altamente optimizados (basados en palabras clave) para modelos de texto-a-imagen, mejorando drásticamente la calidad y coherencia de las imágenes.
-- **Generación de Imágenes POV:** Utiliza modelos de difusión (como Stable Diffusion a través de la API de Hugging Face) para crear imágenes fotorrealistas y cinematográficas desde una perspectiva en primera persona (POV).
-- **Orquestación Modular con LangGraph:** Todo el flujo de trabajo está gestionado por un grafo de estados (Stateful Graph) implementado con LangGraph, lo que permite una gran flexibilidad, modularidad y un manejo de errores robusto.
-- **Arquitectura Escalable:** El código está organizado en módulos lógicos (generación de contenido, multimedia, edición de video, publicación), facilitando la adición de nuevas funcionalidades o el cambio de APIs (ej. cambiar de DALL-E a Stable Diffusion).
+- **Orquestación con Agentes de IA**: Todo el flujo de trabajo está gestionado por un grafo de estados (`StateGraph`) implementado con **LangGraph**. Esto permite una arquitectura robusta, modular y con un manejo de errores centralizado.
+- **Generación de Guiones Avanzada**: Un LLM (GPT-4o) crea una estructura de guion completa, incluyendo una narrativa por escenas, prompts optimizados para IA visual y hashtags relevantes.
+- **Pipeline Multimedia Completo**: 
+    - **Imágenes**: Genera imágenes fotorrealistas con **Ideogram v3 Turbo**.
+    - **Video**: Anima las imágenes estáticas para crear clips dinámicos con **Seedance-1-Pro**.
+    - **Audio**: Crea una pista de sonido ambiental para el video final con **MMAudio**.
+- **Publicación Automatizada**: Integra la **API Graph de Instagram** para publicar los videos generados directamente como Reels.
+- **Arquitectura Escalable con Docker**: Todo el entorno, incluida la aplicación y la base de datos **PostgreSQL**, está contenedorizado con Docker, garantizando consistencia y facilidad de despliegue.
+- **Persistencia y Estado**: Utiliza una base de datos PostgreSQL para registrar el estado de cada proyecto, permitiendo la trazabilidad y la recuperación ante fallos.
 
 ## 🛠️ Stack Tecnológico
 
-- **Orquestación y Agentes IA:** LangChain, LangGraph
-- **Modelos de Lenguaje (LLM):** OpenAI (GPT-4o)
-- **Generación de Imágenes:** Hugging Face Inference API (Stable Diffusion)
-- **Edición de Video (futuro):** MoviePy
-- **Gestión de Dependencias:** Pip (ver `requirements.txt`)
-- **Base de Datos (futuro):** SQLAlchemy con SQLite
+- **Orquestación de Agentes**: LangChain, LangGraph
+- **Modelos de Lenguaje (LLM)**: OpenAI (GPT-4o)
+- **Generación Multimedia (vía API)**: Replicate
+  - **Texto a Imagen**: `ideogram-ai/ideogram-v3-turbo`
+  - **Imagen a Video**: `bytedance/seedance-1-pro`
+  - **Texto a Audio**: `zsxkib/mmaudio`
+- **Base de Datos**: PostgreSQL (orquestado con Docker)
+- **Infraestructura**: Docker, Docker Compose
+- **Publicación**: API Graph de Instagram
 
 ## 📂 Estructura del Proyecto
 
 ```
-content-creator-2/
+ai-content-creator/
 ├── src/
-│   ├── agents/             # Define el grafo de LangGraph y los nodos del flujo
-│   │   └── graph.py
-│   ├── logic/              # Contiene la lógica de negocio principal
-│   │   ├── content_generator.py  # Generación de guiones y prompts
-│   │   ├── multimedia_generator.py # Generación de imágenes y audio
-│   │   ├── video_editor.py       # Edición y composición de video
-│   │   └── ...
-│   └── data/               # Modelos de base de datos (SQLAlchemy)
-├── assets/                 # Directorio para los recursos generados (imágenes, videos)
-├── .env                    # Archivo para variables de entorno (API keys)
-├── main.py                 # Punto de entrada de la aplicación
-└── requirements.txt        # Dependencias de Python
+│   ├── agents/             # Define el grafo de LangGraph y los nodos del flujo.
+│   ├── assets/             # Recursos generados (imágenes, videos, audio).
+│   ├── database/           # Modelos SQLAlchemy y gestión de la sesión de BD.
+│   ├── logic/              # Lógica de negocio: generadores, editores, publicadores.
+│   └── config.py           # Carga y valida la configuración y variables de entorno.
+├── .env.example            # Plantilla para las variables de entorno.
+├── docker-compose.yml      # Orquesta los servicios de la aplicación y la base de datos.
+├── Dockerfile              # Define el contenedor de la aplicación Python.
+├── main.py                 # Punto de entrada de la aplicación.
+└── requirements.txt        # Dependencias de Python.
 ```
 
 ## 🚀 Cómo Empezar
 
 ### Prerrequisitos
 
-- Python 3.9+
+- Docker y Docker Compose instalados.
 - Una cuenta de OpenAI y una API key.
-- Una cuenta de Hugging Face y un API token.
+- Una cuenta de Replicate y un API token.
+- Credenciales para la API Graph de Instagram (`ACCOUNT_ID`, `ACCESS_TOKEN`) y una URL pública (ej. con `ngrok`) para que la API de Instagram pueda acceder al video.
 
-### Instalación
+### Instalación y Ejecución
 
 1.  **Clona el repositorio:**
     ```bash
     git clone <URL_DEL_REPOSITORIO>
-    cd content-creator-2
+    cd ai-content-creator
     ```
 
-2.  **Crea y activa un entorno virtual (recomendado):**
+2.  **Configura las variables de entorno:**
+    Copia el archivo `.env.example` a `.env` y rellena **todas** las variables:
     ```bash
-    python -m venv venv
-    source venv/bin/activate  # En Windows: venv\Scripts\activate
+    cp .env.example .env
     ```
+    Edita el archivo `.env` con tus claves y configuraciones. Asegúrate de que las variables de PostgreSQL coinciden con las usadas en `docker-compose.yml`.
 
-3.  **Instala las dependencias:**
+3.  **Levanta los servicios con Docker Compose:**
+    Este comando construirá la imagen de la aplicación, iniciará un contenedor para la base de datos PostgreSQL y ejecutará la aplicación.
     ```bash
-    pip install -r requirements.txt
+    docker-compose up --build
     ```
 
-4.  **Configura las variables de entorno:**
-    Crea un archivo `.env` en la raíz del proyecto y añade tus claves de API:
-    ```env
-    OPENAI_API_KEY="tu_api_key_de_openai"
-    HF_TOKEN="tu_api_token_de_hugging_face"
-    NUM_SCENES=5
-    ```
-
-### Ejecución
-
-Para iniciar el pipeline, ejecuta el script principal:
-
-```bash
-python main.py
-```
-
-El programa te pedirá que introduzcas una idea para el video, y comenzará el proceso de generación de contenido. Los resultados se guardarán en la carpeta `assets/`.
+4.  **Ejecuta el pipeline:**
+    La aplicación se iniciará automáticamente. Sigue las instrucciones en la terminal para introducir una idea y comenzar el proceso de generación de contenido.
 
 ## 🔮 Futuro del Proyecto
 
-- **Generación de Video por IA:** Integrar un modelo de Image-to-Video (ej. Stable Video Diffusion) para convertir las imágenes estáticas en clips de video dinámicos.
-- **Sonido Ambiental:** Implementar la generación de audio a partir de prompts usando APIs como la de ElevenLabs o Stability AI.
-- **Publicación Automática:** Desarrollar los módulos de `social_publisher` para subir el contenido final directamente a plataformas como YouTube, TikTok e Instagram.
+- **Interfaz de Usuario**: Desarrollar una interfaz web (ej. con FastAPI y React/Vue) para gestionar y visualizar los proyectos de video de forma interactiva.
+- **Agente de Planificación de Contenido**: Crear un agente de nivel superior que, en lugar de recibir una idea, genere un calendario de contenido para una semana basándose en tendencias actuales.
+- **Edición Avanzada de Video**: Implementar un nodo en el grafo que ensamble los clips individuales en un único video final, añadiendo transiciones y sincronizando el audio de forma más precisa.
