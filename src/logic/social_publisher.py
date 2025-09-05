@@ -100,7 +100,6 @@ def publish_to_instagram(video_path: str, script_data: Dict[str, Any]) -> Option
         print("Error: Credenciales de Instagram Graph API no configuradas. Saltando publicación.")
         return None
 
-    # Construir la descripción
     caption = script_data.get('idea', 'Un video increíble generado por IA.')
     hashtags = script_data.get('hashtags', [])
     if hashtags:
@@ -110,7 +109,6 @@ def publish_to_instagram(video_path: str, script_data: Dict[str, Any]) -> Option
     BASE_URL = f"https://graph.facebook.com/{API_VERSION}"
     try:
         with VideoServerManager(video_path) as video_url:
-            # --- Paso 1: Crear un contenedor de medios ---
             print("Paso 1: Creando contenedor de medios...")
             create_container_url = f"{BASE_URL}/{INSTAGRAM_ACCOUNT_ID}/media"
             create_params = {
@@ -120,8 +118,6 @@ def publish_to_instagram(video_path: str, script_data: Dict[str, Any]) -> Option
                 'access_token': INSTAGRAM_ACCESS_TOKEN
             }
 
-    # try:
-    #     with VideoServerManager(video_path) as video_url:
             create_params['video_url'] = video_url
             print(f"Params: {create_params}")
             
@@ -132,12 +128,11 @@ def publish_to_instagram(video_path: str, script_data: Dict[str, Any]) -> Option
                 raise ValueError("No se pudo obtener el ID de creación del contenedor.")
             print(f"Contenedor creado con ID: {creation_id}")
 
-            # --- Paso 2: Esperar a que el contenedor esté listo ---
             print("Paso 2: Esperando que el contenedor esté listo...")
             status_url = f"https://graph.facebook.com/{creation_id}"
             status_params = {'fields': 'status_code', 'access_token': INSTAGRAM_ACCESS_TOKEN}
         
-            for _ in range(20): # Intentar por un máximo de 100 segundos
+            for _ in range(20):
                 status_response = requests.get(status_url, params=status_params)
                 status_response.raise_for_status()
                 status = status_response.json().get('status_code')
@@ -150,7 +145,6 @@ def publish_to_instagram(video_path: str, script_data: Dict[str, Any]) -> Option
             else:
                 raise TimeoutError("El contenedor de Instagram no estuvo listo a tiempo.")
 
-            # --- Paso 3: Publicar el contenedor ---
             print("Paso 3: Publicando el video...")
             publish_url = f"{BASE_URL}/{INSTAGRAM_ACCOUNT_ID}/media_publish"
             publish_params = {
@@ -162,8 +156,6 @@ def publish_to_instagram(video_path: str, script_data: Dict[str, Any]) -> Option
             media_id = publish_response.json().get('id')
             print(f"¡Publicación exitosa! Media ID: {media_id}")
         
-            # Construir la URL final (Instagram no devuelve la URL directa del Reel)
-            # Se necesita una llamada adicional para obtener el 'permalink'
             permalink_url = f"https://graph.facebook.com/{media_id}"
             permalink_params = {'fields': 'permalink', 'access_token': INSTAGRAM_ACCESS_TOKEN}
             permalink_response = requests.get(permalink_url, params=permalink_params)

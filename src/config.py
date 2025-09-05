@@ -6,7 +6,6 @@ load_dotenv()
 
 NUM_SCENES = int(os.getenv("NUM_SCENES", 3))
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-HF_TOKEN = os.getenv("HF_TOKEN")
 REPLICATE_API_TOKEN = os.getenv("REPLICATE_API_TOKEN")
 INSTAGRAM_ACCOUNT_ID = os.getenv('INSTAGRAM_ACCOUNT_ID')
 INSTAGRAM_ACCESS_TOKEN = os.getenv('INSTAGRAM_ACCESS_TOKEN')
@@ -17,7 +16,6 @@ def check_env_vars():
     """Verifica que las variables de entorno esenciales estén configuradas."""
     required_vars = {
         "OPENAI_API_KEY": OPENAI_API_KEY,
-        "HF_TOKEN": HF_TOKEN,
         "REPLICATE_API_TOKEN": REPLICATE_API_TOKEN,
         "DATABASE_URL": DATABASE_URL
     }

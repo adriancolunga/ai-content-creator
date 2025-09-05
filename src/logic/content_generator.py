@@ -38,8 +38,6 @@ def generate_viral_script(idea: str) -> Dict[str, Any]:
     """Función principal que orquesta la generación del guion completo en una sola llamada a la IA."""
     print(f"Iniciando generación de guion para la idea: '{idea}'")
 
-    # gpt-4o
-    # gpt-3.5-turbo
     llm = ChatOpenAI(model="gpt-4o", temperature=0.7, api_key=OPENAI_API_KEY)
     structured_llm = llm.with_structured_output(ScriptStructure)
 

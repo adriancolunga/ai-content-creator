@@ -13,9 +13,6 @@ def get_next_pending_idea() -> Optional[Idea]:
     """
     try:
         with get_db() as db:
-            # Usamos with_for_update() para bloquear la fila seleccionada hasta que la transacción termine (commit).
-            # Esto es fundamental para evitar que dos workers tomen la misma idea en un entorno concurrente.
-            # Nota: Requiere un backend de DB que soporte esta característica, como PostgreSQL. 
             idea = db.query(Idea).filter(Idea.status == 'pending').order_by(Idea.created_at.asc()).with_for_update().first()
             
             if idea:
