@@ -63,7 +63,6 @@ def generate_videos_from_images(idea_id: int, image_paths: list[str], video_prom
 
             print(f"URL del video generado por Replicate: {output_url}")
 
-            # Descargar el video
             video_filename = f"{idea_id}_{i}_final.mp4"
             save_path = os.path.join(video_dir, video_filename)
             _download_video(output_url.url, save_path)

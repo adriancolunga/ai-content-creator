@@ -126,7 +126,6 @@ def generate_multimedia_for_idea(script_data: Dict, project_id: str) -> Dict[str
     
     multimedia_paths["images"] = image_paths
 
-    # 3. Extraer prompts de video y generar los videos (con audio)
     video_prompts = [scene.get('video_prompt', '') for scene in scenes]
     audio_prompt = script_data.get('audio_prompt', '')
     video_paths = generate_videos_from_images(project_id, image_paths, video_prompts, audio_prompt)

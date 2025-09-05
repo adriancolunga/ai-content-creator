@@ -62,7 +62,6 @@ def generate_multimedia_node(state: AppState) -> AppState:
             script_data = state['script_data']
             project_id_str = f"{state['project_id']}_{uuid.uuid4().hex[:8]}"
 
-            # Orquestar la generación de imágenes y videos
             multimedia_results = multimedia_generator.generate_multimedia_for_idea(script_data, project_id_str)
 
             image_paths = multimedia_results.get('images', [])
@@ -72,7 +71,6 @@ def generate_multimedia_node(state: AppState) -> AppState:
             if not image_paths or not video_paths:
                 raise ValueError("Fallo en la generación de multimedia (imágenes o videos).")
 
-            # Actualizar el estado para los siguientes nodos
             state['image_paths'] = image_paths
             state['video_paths'] = video_paths
             state['audio_path'] = audio_path
@@ -82,7 +80,6 @@ def generate_multimedia_node(state: AppState) -> AppState:
                 'videos': video_paths,
                 'audio': audio_path
             }
-            # Guardamos la primera ruta de video como referencia principal, si existe
             project.video_path = video_paths[0] if video_paths else None
             project.status = 'multimedia_completed'
             db.commit()
@@ -138,7 +135,6 @@ def decide_next_node(state: AppState):
     """Determina el siguiente nodo a ejecutar basándose en si ocurrió un error."""
     if state.get('error'):
         return "handle_error"
-    # Si no hay un campo 'error', o si está vacío/None, continuamos
     return "continue"
     
 
