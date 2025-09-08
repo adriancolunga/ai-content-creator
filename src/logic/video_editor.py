@@ -49,9 +49,10 @@ def generate_videos_from_images(idea_id: int, image_paths: list[str], video_prom
                 output_url = replicate.run(
                     "bytedance/seedance-1-pro",
                     input={
-                        "first_frame_image": image_file,
+                        "image": image_file,
                         "prompt": video_prompt,
-                        "resolution": "720p"
+                        "resolution": "720p",
+                        "aspect_ratio": "9:16"
                     }
                 )
             
