@@ -6,7 +6,7 @@ services:
     container_name: content_creator_app
     command: python main.py
     volumes:
-      - ./assets:/app/assets
+      - ./src/assets:/app/src/assets
     env_file:
       - ./.env
     depends_on:
