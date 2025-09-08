@@ -34,7 +34,7 @@ def generate_content_node(state: AppState) -> AppState:
             db.commit()
 
             # ----------
-            # script_data = {"scenes": [{"scene_description": "Erudito salvando pergaminos entre llamas", "image_prompt": "ancient library engulfed in flames, scholar in traditional robes, scrolls in hands, dramatic lighting, intense fire, smoke, chaos, surreal, cinematic, photorealistic, 4K", "video_prompt": "Camera shakes slightly to simulate panic, flames flicker dynamically"}], "environment_prompt": "Ancient library with towering shelves, filled with scrolls and manuscripts, bathed in the warm glow of fire, chaotic and urgent atmosphere", "audio_prompt": "Crackling fire, distant shouting, rustle of scrolls, ominous background music", "hashtags": ["#HistoriaAntigua", "#BibliotecaDeAlejandr\u00eda", "#POVInmersivo"]}
+            # script_data = {"scenes": [{"scene_description": "Gladiator's POV: Coliseum ablaze during battle.", "image_prompt": "POV of gladiator, coliseum in flames, opponent in foreground, dramatic lighting, cinematic, photorealistic, 4K, intense atmosphere, historical accuracy", "video_prompt": "Camera shakes slightly to simulate the intensity of the battle, flames flicker and smoke drifts across the scene"}], "environment_prompt": "Ancient Roman coliseum engulfed in flames, chaotic and intense atmosphere, historical setting, rich in detail and color, evokes a sense of urgency and danger", "audio_prompt": "Crackling fire, distant roars of the crowd, clashing swords, heavy breathing of the gladiator", "hashtags": ["#GladiatorLife", "#ColiseumOnFire", "#EpicBattle"]}
             # ----------
 
 
